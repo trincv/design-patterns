@@ -5,7 +5,7 @@ import shop.furniture.chair.VictorianChair;
 import shop.furniture.sofa.Sofa;
 import shop.furniture.sofa.VictorianSofa;
 
-public class VictorianSofa extends FurnitureFactory{
+public class VictorianFactory extends FurnitureFactory{
     
     @Override
     public Chair createChair() {
