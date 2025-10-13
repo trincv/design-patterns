@@ -1,6 +1,6 @@
-package notificate.users;
+package notification.users;
 
-import notificate.notification.Notification;
+import notification.message.Message;
 
 public abstract class User {
 
@@ -11,10 +11,10 @@ public abstract class User {
     }
     
     public void sendNotification() {
-        Notification notify = createNotification();
+        Message notify = createNotification();
         notify.send(this.name);
     }
 
-    public abstract Notification createNotification();
+    public abstract Message createNotification();
 
 }

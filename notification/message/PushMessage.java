@@ -1,6 +1,6 @@
-package notificate.notification;
+package notification.message;
 
-public class PushNotification extends Notification{
+public class PushMessage extends Message{
 
     public void send(String name) {
         System.out.println("Sending push notification to " + name + "...");

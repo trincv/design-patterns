@@ -1,7 +1,7 @@
-package notificate;
-import notificate.users.EnterpriseUser;
-import notificate.users.FreeUser;
-import notificate.users.PremiumUser;
+package notification;
+import notification.users.EnterpriseUser;
+import notification.users.FreeUser;
+import notification.users.PremiumUser;
 
 public class Main {
     

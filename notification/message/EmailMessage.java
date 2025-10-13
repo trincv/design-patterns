@@ -1,6 +1,6 @@
-package notificate.notification;
+package notification.message;
 
-public class EmailNotification extends Notification{
+public class EmailMessage extends Message{
 
     public void send(String name) {
         System.out.println("Sending email notification to " + name + "...");
