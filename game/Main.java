@@ -1,5 +1,6 @@
 package game;
 
+import game.character.GameCharacter;
 import game.character.Warrior;
 import game.weapons.Weapon;
 
@@ -9,7 +10,7 @@ public class Main {
         
 
         Warrior wa1 = new Warrior("Hella", new Weapon("axe"));
-        Warrior wa2 = (Warrior) wa1.clone();
+        GameCharacter wa2 = wa1.clone();
 
         wa1.display();
 
