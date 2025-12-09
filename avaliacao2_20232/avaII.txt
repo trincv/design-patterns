@@ -1,0 +1,81 @@
+Questão 1:
+
+
+public abstract class CriptographedMessage implements Request {
+
+    protected Request message;
+
+    public CriptographedMessage(Request message) { this.message = message; }
+
+    @Override
+    public void addHeader(String string1, String string2) { message.addHeader(string1, string2); }
+
+    @Override
+    public String readHeader(String string1) { return message.readHeader(string1); }
+
+    @Override
+    public void setContent(Byte[] content) { message.setContent(content); }
+
+}
+
+
+
+public AesCriptography extends CriptographedMessage {
+
+    public AesCriptography(Request message) { super(request); }
+
+    @Override
+    public byte[] getContent() { 
+        
+        byte[] originalContent = message.getContent();
+
+        // lógica para criptografia da mensagem
+
+        return criptographedMessage;
+    }
+}
+
+
+
+Nesse caso demonstrei como funcionaria a construção das classes de criptografia, que se comportarão como um decorator. Poderia criar uma classe abstrada
+    CompactedMessage que também implementasse Request, assim utilizando ela para a criação das classes concretas de compactação, que teriam a mesma estrutura
+    das de criptografia, como a que fiz acima, tendo como diferença apenas a lógica de compactação que seria diferente da de criptografia. Assim, optei por esse
+    estilo por deixar as classes mais separadas, entretanto poderia criar uma abstração compartilhada entre as implementações de criptografia e compactação
+    tornando mais simples. Essa solução pode ser espelhada para a interface de Response e evita a explosão de classes, além de flexibilidade na combinação e 
+    remoção de funcionalidades.
+
+Ex: Request request2 = new AesCriptography(af.getRequest("Mensagem"));
+
+    Request request4 = new RsaCriptography(new Lz78Compacter(af.getRequest("Outra mensagem")));
+
+
+Questão 2:
+
+
+public class adapterAes256Criptography extends CriptographedMessage {
+
+    private AES256 criptography;
+
+    public adapterAes256Criptography(Request message, AES256 criptography) {
+        super(request);
+        this.criptography = criptography;
+
+        this.criptography.init();
+    }
+
+    @Override
+    public byte[] getContent() throws securityException { 
+
+        byte[] criptographedMessage = message.getContent();
+
+        criptographedMessage = this.criptography.doFinal(criptographedMessage);
+
+        return criptographedMessage;
+    }
+
+}
+
+Nesse caso utilizaríamos o adapter como mecanismo de possibilitar a interação do sistema com essa classe de criptografia externa, assim a classe adapter desenvolvida
+    age tanto como decorator quanto como adapter. Adaptando métodos da classe externa para que possam ser utilizados de acordo com a lógica e sintaxe do
+    middleware sendo desenvolvido. Essa classe substituiria a que criei na primeira questão, já que fariam a mesma coisa.
+
