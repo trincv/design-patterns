@@ -7,63 +7,95 @@ public interface MapaExportador {
 
 public abstract class NivelDetalhe implements MapaExportador {
 
-    protected FormatoExportador formato;
+    protected FormatoMapaExportador formato;
 
-    public NivelDetalhe(FormatoExportador formato) {
+    public NivelDetalhe(FormatoMapaExportador formato) {
         this.formato = formato;
     }
 
 }
 
-public interface FormatoExportador {
-
+public interface FormatoMapaExportador {
+    public String adicionarPonto(String tipo, PontoGeografico ponto);
 
 }
 
 
-public class PercursoNivel extends NivelDetalhe {
+public class Base extends NivelDetalhe {
 
-    public PercursoNivel(FormatoExportador formato) {
+    public Base(FormatoMapaExportador formato) {
         super(formato);
     }
+
+    public String adicionarPrismas(Prisma prisma) { 
+        // Lógica do uso do formato para recuperar uma string com os dados já formatados dos pontos dos prismas. Retornando uma String para append. 
+    } 
 
     @Override
     public String exportar(Mapa mapa) {
 
+        // Lógica que utiliza dos métodos da classe para criar a string de retorno. Ex: String resultadoBase = adicionarPrismas(mapa);
 
-        // Lógica para recuperar os dados necessários do mapa passado
-
-        return resultadoPercurso;
+        return resultadoBase;
     }
 
 }
 
 
-public class SVGFormato implements FormatoExportador {
+public class SVGFormato implements FormatoMapaExportador {
 
-    public SVGFormato(NivelDetalhe nivel) {
-        super(nivel);
+    @Override
+    public String adicionarPonto(String tipo, PontoGeografico ponto) {
+        // Lógica para recuperar ponto geográfico dos prismas e formata-los em seu respectivo formato de String para devolver ao NivelDetalhe.
     }
 
-    @Override 
-    public String exportar() {
-
-        String valorNivel = this.getNivelDetalhe().exportar();
-
-        –– Lógica de exportação SVG
-
-        return valorRetorno;
-    }
 }
 
 
 EX: Mapa mapa = new Mapa();
 
-    MapaExportador exportador = new SVGFormato(new PercursoNivel(mapa));
-    exportador.exportar();
+    MapaExportador exportador = new Base(new SVGFormato());
+    exportador.exportar(mapa);
 
 
 
 
 Questão 2:
 
+
+public abstract class Decorator implements MapaExportador {
+
+    protected MapaExportador mapaExportador;
+
+    public Decorator(MapaExportador mapaExportador) { this.mapaExportador = mapaExportador; }
+
+    // implementação dos métodos de MapaExportador, chamando o formato para o retorno dos dados. Afinal ele somente decorará o método exportar.
+
+}
+
+public class MarcaDaAgua extends Decorator {
+
+    public MarcaDaAgua(MapaExportador mapaExportador) { super(mapaExportador); }
+
+    @Override
+    public String exportar(Mapa mapa) {
+
+        String conteudoFinal = super(exportar(mapa));
+
+        conteudoFinal = this.adicionarMarca(conteudo);
+
+        return conteudoFinal;
+    }
+
+    public String adicionarMarca(String conteudo) {
+        // Lógica para adicionar marca da agua.
+
+        return conteudoComMarca;
+    }
+}
+
+
+
+
+Ex: MapaExportador exportadorMA = new MarcaDaAgua(new Base(new SVGFormato()));
+    exportadorMA.exportar(mapa);

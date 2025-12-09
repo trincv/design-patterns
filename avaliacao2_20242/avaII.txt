@@ -1,0 +1,111 @@
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+public abstract class Decorator extends Calendario {
+
+    protected Calendario calendario;
+
+    public Decorator(Calendario calendario) { this.calendario = calendario; }
+
+    @Override
+    public void adicionarEvento(Evento evento) {
+        super.adicionarEvento(evento);
+    }
+
+}
+
+
+public class MunicipalEvento extends Decorator {
+
+    public MunicipalEvento(Calendario calendario) { super(calendario); }
+
+    @Override
+    public Collection<Evento> from(Timestamp timestamp1, Timestamp timestamp2) {
+
+        Collection<Evento> eventos = this.calendario.from(timestamp1,timestamp2);
+        
+        CalendarioOnline online = new CalendarioOnline(uri);                     // site de eventos municipais
+        eventos.addAll(online.consultar(timestamp1, timestamp2));
+
+        return eventos;                                                         // retorno de eventos do calendário e de um calendario municipal
+    }
+
+    @Override
+    public Collection<Evento> day(Timestamp day) {
+
+        Collection<Evento> eventos = this.calendario.day(day);
+        
+        CalendarioOnline online = new CalendarioOnline(uri);                     // site de eventos municipais
+        eventos.addAll(online.consultar(day));
+
+        return eventos;                                                         // retorno de eventos do calendário e de um calendario municipal
+    }
+
+    @Override
+    public Collection<Evento> today() {
+
+        Collection<Evento> eventos = this.calendario.today();
+        
+        CalendarioOnline online = new CalendarioOnline(uri);                     // site de eventos municipais
+        eventos.addAll(online.consultar(Timestamp.today));                           // Algo assim
+
+        return eventos;                                                         // retorno de eventos do calendário e de um calendario municipal
+    }
+
+}
+
+
+Supomos que tenha uma aplicacao AplicacaoPessoal para a criação de calendarios pessoais
+
+Ex: Calendario calendario = new MunicipalEvento(new AplicacaoPessoal().createCalendario());
+
+
+
+Questão 2:
+
+
+public class AulaAdapterEvento extends AbstractEvento {
+
+    private Aula aula;
+
+    public AulaAdapterEvento(Aula aula) { this.aula = aula; }
+
+    public String getProfessor() { return aula.getProfessor(); }
+
+    @Override
+    public String getDescricao() { return "Aula de " + aula.getCodDisciplina() + " - " aula.getDescricaoDisciplina(); }
+
+    @Override
+    public Geolocalizacao getLocalizacao() { return aula.getSala(); }
+
+    @Override
+    public Timestamp getInicio() { 
+        Timestamp horario[] = aula.getHorario();
+
+        return horario[0];
+    }
+
+    @Override
+    public Timestamp getTermino() { 
+        Timestamp horario[] = aula.getHorario();
+
+        return horario[1];
+    }
+
+    @Override
+    public Boolean iniciaEm(Timestamp day) { 
+        // Lógica para determinar se é verdade ou falso;
+    }
+
+    @Override
+    public Boolean iniciaEntre(Timestamp timestamp1, Timestamp timestamp2) { 
+        // Lógica para determinar se é verdade ou falso;
+    }
+}
+
+
+
+Minha lógica supõe que para criar um evento seria utilizado um builder, foquei mais em adaptar os métodos da interface evento para que funcionassem com aula.
+
+Ex: Evento aula1 = new AulaAdapterEvento(aula);
+    aula1.getDescricao();
