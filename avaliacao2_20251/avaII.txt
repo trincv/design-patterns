@@ -1,0 +1,69 @@
+Questão 1:
+
+
+public interface MapaExportador {
+    public abstract String exportar(Mapa mapa);
+}
+
+public abstract class NivelDetalhe implements MapaExportador {
+
+    protected FormatoExportador formato;
+
+    public NivelDetalhe(FormatoExportador formato) {
+        this.formato = formato;
+    }
+
+}
+
+public interface FormatoExportador {
+
+
+}
+
+
+public class PercursoNivel extends NivelDetalhe {
+
+    public PercursoNivel(FormatoExportador formato) {
+        super(formato);
+    }
+
+    @Override
+    public String exportar(Mapa mapa) {
+
+
+        // Lógica para recuperar os dados necessários do mapa passado
+
+        return resultadoPercurso;
+    }
+
+}
+
+
+public class SVGFormato implements FormatoExportador {
+
+    public SVGFormato(NivelDetalhe nivel) {
+        super(nivel);
+    }
+
+    @Override 
+    public String exportar() {
+
+        String valorNivel = this.getNivelDetalhe().exportar();
+
+        –– Lógica de exportação SVG
+
+        return valorRetorno;
+    }
+}
+
+
+EX: Mapa mapa = new Mapa();
+
+    MapaExportador exportador = new SVGFormato(new PercursoNivel(mapa));
+    exportador.exportar();
+
+
+
+
+Questão 2:
+

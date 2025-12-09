@@ -1,0 +1,81 @@
+Questão 1:
+
+
+public abstract class Decorator extends Request {
+    
+}
+
+
+public class CriptographyAESRequest extends Decorator {
+
+    private Request request;
+
+    public CriptographyAESRequest(Request request) {
+        this.request = request;
+    }
+
+    @Override
+    public byte[] getContent() {
+        byte[] content = request.getContent();
+
+        // lógica de criptografia
+
+        return content;
+    }
+}
+
+public class CompactHuffmanRequest extends Decorator {
+
+    private Request request;
+
+    public CompactHuffmanRequest(Request request) {
+        this.request = request;
+    }
+
+    @Override
+    public byte[] getContent() {
+        byte[] content = request.getContent();
+
+        // lógica de compactação
+
+        return content;
+    }
+}
+
+
+
+Exemplos:  
+
+Request request2 = new CriptographyAESRequest(af.getRequest("MENSAGEM PARA CRIPTOGRAFAR"));
+Request request3 = new CompactHuffmanRequest(new CriptographyAESRequest(af.getRequest("MENSAGEM PARA CRIPTOGRAFAR")));
+
+
+
+Questão 2:
+
+public class AdapterAES256Request extends CriptographyAESRequest {
+
+    private AES256 criptography;
+
+    public AdapterAES256Request (AES256 criptography, Request request) {
+        super(request);
+        this.criptography = criptography;
+    }
+
+    // A lógica de criptografia ficará aqui ao invés do decorator, retornando enfim a mensagem criptografada
+    @Override
+    public byte[] getContent() {
+        
+        byte[] content = super.getContent();
+
+        criptography.init();
+
+        content = criptography.doFinal(content);
+
+        return content;
+    }
+}
+
+
+
+Request request2 = new AdapterAES256Request(new AES256(), af.getRequest("MENSAGEM PARA CRIPTOGRAFAR"));
